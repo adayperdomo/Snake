@@ -130,6 +130,8 @@ public class GamePanel extends JPanel {
         elapsedTime = 0; // Reset elapsed time
         movementTimer.start(); // Restart the movement timer
         elapsedTimeTimer.start(); // Restart the elapsed time timer
+        remove(restartButton); // Remove the restart button
+        remove(exitButton); // Remove the exit button
         repaint(); // Repaint to update the game state
     }
 
@@ -155,11 +157,16 @@ public class GamePanel extends JPanel {
         if (isGameOver) {
             g.setColor(Color.RED); // Set color for Game Over message
             g.setFont(new Font("Arial", Font.BOLD, 48)); // Set font size
-            g.drawString("Game Over", getWidth() / 2 - 100, getHeight() / 2 - 20); // Draw message
+            String gameOverMessage = "Game Over";
+            FontMetrics metrics = g.getFontMetrics(g.getFont());
+            int x = (getWidth() - metrics.stringWidth(gameOverMessage)) / 2; // Center the message
+            g.drawString(gameOverMessage, x, getHeight() / 2 - 20); // Draw message
 
             // Draw buttons
-            restartButton.setBounds(getWidth() / 2 - 100, getHeight() / 2 + 20, 200, 50);
-            exitButton.setBounds(getWidth() / 2 - 100, getHeight() / 2 + 80, 200, 50);
+            int buttonWidth = 200;
+            int buttonHeight = 50;
+            restartButton.setBounds(getWidth() / 2 - buttonWidth / 2, getHeight() / 2 + 20, buttonWidth, buttonHeight);
+            exitButton.setBounds(getWidth() / 2 - buttonWidth / 2, getHeight() / 2 + 80, buttonWidth, buttonHeight);
             add(restartButton);
             add(exitButton);
         }
