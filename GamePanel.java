@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
@@ -7,6 +8,12 @@ import java.util.LinkedList;
 public class GamePanel extends JPanel {
     private LinkedList<Point> snake; // List to store the positions of the snake segments
     private int direction; // Direction of the snake movement
+    private boolean isGameOver = false; // Game Over state
+    private int elapsedTime = 0; // Timer variable
+    private Timer movementTimer; // Timer for snake movement
+    private Timer elapsedTimeTimer; // Timer for elapsed time
+    private JButton restartButton; // Button to restart the game
+    private JButton exitButton; // Button to exit the game
 
     public GamePanel() {
         snake = new LinkedList<>();
@@ -15,7 +22,7 @@ public class GamePanel extends JPanel {
         direction = KeyEvent.VK_RIGHT; // Initial direction
 
         setPreferredSize(new Dimension(800, 600));
-        setBackground(Color.green);
+        setBackground(Color.GRAY);
         setFocusable(true); // Make the panel focusable to receive key events
         addKeyListener(new KeyAdapter() {
             @Override
@@ -41,15 +48,30 @@ public class GamePanel extends JPanel {
             }
         });
 
-        Timer timer = new Timer(100, e -> {
+        // Movement timer for the snake
+        movementTimer = new Timer(100, e -> {
             if (direction != 0) { // Only move if a direction is set
                 moveSnake();
             }
         });
-        timer.start(); // Start the timer to check for movement
+        movementTimer.start(); // Start the movement timer
+
+        // Elapsed time timer
+        elapsedTimeTimer = new Timer(1000, e -> {
+            elapsedTime++; // Increment elapsed time every second
+        });
+        elapsedTimeTimer.start(); // Start the elapsed time timer
+
+        // Initialize buttons
+        restartButton = new JButton("Restart");
+        exitButton = new JButton("Exit");
+        restartButton.addActionListener(this::restartGame);
+        exitButton.addActionListener(e -> System.exit(0)); // Exit action
     }
 
     private void moveSnake() {
+        if (isGameOver) return; // Prevent movement if the game is over
+
         Point head = snake.getFirst(); // Get the current head position
         Point newHead = new Point(head); // Create a new head based on the current head
 
@@ -69,6 +91,20 @@ public class GamePanel extends JPanel {
                 break;
         }
 
+        // Check for collisions with walls
+        if (newHead.x < 0 || newHead.x >= getWidth() || newHead.y < 0 || newHead.y >= getHeight()) {
+            gameOver(); // Trigger Game Over if the snake hits the wall
+            return;
+        }
+
+        // Check for collisions with itself
+        for (int i = 1; i < snake.size(); i++) {
+            if (newHead.equals(snake.get(i))) {
+                gameOver(); // Trigger Game Over if the snake collides with itself
+                return;
+            }
+        }
+
         // Update the snake's body
         snake.addFirst(newHead); // Add the new head to the front of the list
         if (snake.size() > 3) {
@@ -76,6 +112,25 @@ public class GamePanel extends JPanel {
         }
 
         repaint(); // Repaint the panel to update the snake's position
+    }
+
+    private void gameOver() {
+        isGameOver = true; // Set the game state to over
+        movementTimer.stop(); // Stop the movement timer
+        elapsedTimeTimer.stop(); // Stop the elapsed time timer
+        repaint(); // Repaint to show the game over message
+    }
+
+    private void restartGame(ActionEvent e) {
+        isGameOver = false; // Reset the game state
+        snake.clear(); // Clear the snake
+        snake.add(new Point(100, 100)); // Reset initial position
+        snake.add(new Point(80, 100)); // Reset first body segment
+        direction = KeyEvent.VK_RIGHT; // Reset direction
+        elapsedTime = 0; // Reset elapsed time
+        movementTimer.start(); // Restart the movement timer
+        elapsedTimeTimer.start(); // Restart the elapsed time timer
+        repaint(); // Repaint to update the game state
     }
 
     @Override
@@ -90,6 +145,23 @@ public class GamePanel extends JPanel {
         for (int i = 1; i < snake.size(); i++) {
             Point segment = snake.get(i);
             g.fillRect(segment.x, segment.y, 20, 20); // Draw the body segments
+        }
+
+        // Draw the timer in the upper left corner
+        g.setColor(Color.white); // Set color for the timer text
+        g.drawString("Time: " + elapsedTime + "s", 10, 20); // Draw the timer
+
+        // Draw Game Over message if the game is over
+        if (isGameOver) {
+            g.setColor(Color.RED); // Set color for Game Over message
+            g.setFont(new Font("Arial", Font.BOLD, 48)); // Set font size
+            g.drawString("Game Over", getWidth() / 2 - 100, getHeight() / 2 - 20); // Draw message
+
+            // Draw buttons
+            restartButton.setBounds(getWidth() / 2 - 100, getHeight() / 2 + 20, 200, 50);
+            exitButton.setBounds(getWidth() / 2 - 100, getHeight() / 2 + 80, 200, 50);
+            add(restartButton);
+            add(exitButton);
         }
     }
 }
