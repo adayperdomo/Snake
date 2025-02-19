@@ -1,4 +1,4 @@
-import javax.swing.*;
+ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -8,6 +8,8 @@ import java.util.LinkedList;
 public class GamePanel extends JPanel {
     private LinkedList<Point> snake; // List to store the positions of the snake segments
     private int direction; // Direction of the snake movement
+    private Point applePosition; // Position of the apple
+
     private boolean isGameOver = false; // Game Over state
     private int elapsedTime = 0; // Timer variable
     private Timer movementTimer; // Timer for snake movement
@@ -20,6 +22,8 @@ public class GamePanel extends JPanel {
         snake.add(new Point(100, 100)); // Initial position of the snake head
         snake.add(new Point(80, 100));  // Initial position of the first body segment
         direction = KeyEvent.VK_RIGHT; // Initial direction
+        generateApple(); // Generate initial apple position
+
 
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.GRAY);
@@ -105,11 +109,18 @@ public class GamePanel extends JPanel {
             }
         }
 
-        // Update the snake's body
-        snake.addFirst(newHead); // Add the new head to the front of the list
-        if (snake.size() > 3) {
-            snake.removeLast(); // Keep only two segments
+        // Check for apple collision
+        if (newHead.equals(applePosition)) {
+            snake.addFirst(newHead); // Grow the snake
+            generateApple(); // Generate new apple position
+        } else {
+            // Update the snake's body
+            snake.addFirst(newHead); // Add the new head to the front of the list
+            if (snake.size() > 3) {
+                snake.removeLast(); // Keep only two segments
+            }
         }
+
 
         repaint(); // Repaint the panel to update the snake's position
     }
@@ -120,6 +131,17 @@ public class GamePanel extends JPanel {
         elapsedTimeTimer.stop(); // Stop the elapsed time timer
         repaint(); // Repaint to show the game over message
     }
+
+    private void generateApple() {
+        // Generate random position within panel bounds, aligned with grid
+        int maxX = getWidth() / 20 - 1;
+        int maxY = getHeight() / 20 - 1;
+        applePosition = new Point(
+            (int)(Math.random() * maxX) * 20,
+            (int)(Math.random() * maxY) * 20
+        );
+    }
+
 
     private void restartGame(ActionEvent e) {
         isGameOver = false; // Reset the game state
@@ -136,7 +158,6 @@ public class GamePanel extends JPanel {
         requestFocus(); // Request focus for key input
         repaint(); // Repaint to update the game state
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -156,8 +177,13 @@ public class GamePanel extends JPanel {
         g.setColor(Color.white); // Set color for the timer text
         g.drawString("Time: " + elapsedTime + "s", 10, 20); // Draw the timer
 
+        // Draw the apple
+        g.setColor(Color.RED);
+        g.fillRect(applePosition.x, applePosition.y, 20, 20);
+
         // Draw Game Over message if the game is over
         if (isGameOver) {
+
             g.setColor(Color.RED); // Set color for Game Over message
             g.setFont(new Font("Arial", Font.BOLD, 48)); // Set font size
             String gameOverMessage = "Game Over";
