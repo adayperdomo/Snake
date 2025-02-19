@@ -12,7 +12,9 @@ public class GamePanel extends JPanel {
 
     private boolean isGameOver = false; // Game Over state
     private int elapsedTime = 0; // Timer variable
+    private int score = 0; // Player score
     private Timer movementTimer; // Timer for snake movement
+
     private Timer elapsedTimeTimer; // Timer for elapsed time
     private JButton restartButton; // Button to restart the game
     private JButton exitButton; // Button to exit the game
@@ -112,7 +114,9 @@ public class GamePanel extends JPanel {
         // Check for apple collision
         if (newHead.equals(applePosition)) {
             snake.addFirst(newHead); // Grow the snake
+            score++; // Increase score
             generateApple(); // Generate new apple position
+
         } else {
             // Update the snake's body
             snake.addFirst(newHead); // Add the new head to the front of the list
@@ -173,9 +177,11 @@ public class GamePanel extends JPanel {
             g.fillRect(segment.x, segment.y, 20, 20); // Draw the body segments
         }
 
-        // Draw the timer in the upper left corner
-        g.setColor(Color.white); // Set color for the timer text
-        g.drawString("Time: " + elapsedTime + "s", 10, 20); // Draw the timer
+        // Draw the score and timer in the upper left corner
+        g.setColor(Color.white); // Set color for the text
+        g.drawString("Score: " + score, 10, 20); // Draw the score
+        g.drawString("Time: " + elapsedTime + "s", 10, 40); // Draw the timer
+
 
         // Draw the apple
         g.setColor(Color.RED);
