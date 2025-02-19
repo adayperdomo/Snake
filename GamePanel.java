@@ -149,7 +149,9 @@ public class GamePanel extends JPanel {
 
     private void restartGame(ActionEvent e) {
         isGameOver = false; // Reset the game state
+        score = 0; // Reset score
         snake.clear(); // Clear the snake
+
         snake.add(new Point(100, 100)); // Reset initial position
         snake.add(new Point(80, 100)); // Reset first body segment
         direction = KeyEvent.VK_RIGHT; // Reset direction
