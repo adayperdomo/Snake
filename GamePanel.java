@@ -24,7 +24,7 @@ public class GamePanel extends JPanel {
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.GRAY);
         setFocusable(true); // Make the panel focusable to receive key events
-        addKeyListener(new KeyAdapter() {
+        addKeyListener(new KeyAdapter() { // Add key listener in the constructor
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -132,8 +132,11 @@ public class GamePanel extends JPanel {
         elapsedTimeTimer.start(); // Restart the elapsed time timer
         remove(restartButton); // Remove the restart button
         remove(exitButton); // Remove the exit button
+        setFocusable(true); // Ensure panel can receive key events
+        requestFocus(); // Request focus for key input
         repaint(); // Repaint to update the game state
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
