@@ -286,7 +286,7 @@ public class GamePanel extends JPanel {
 }
 
 ```
-### SnakeGmae.java
+### SnakeGamae.java
 
 ```sh
 import javax.swing.JFrame;
