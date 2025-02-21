@@ -39,7 +39,7 @@ Se utiliza un **Timer** para actualizar la lógica y el movimiento de la serpien
 
 ## 🤖 Uso de Herramientas de IA
 
-Durante el desarrollo del juego se emplearon herramientas de inteligencia artificial (ChatGPT, Bard, Copilot, Bing Chat, etc.) para:
+Durante el desarrollo del juego se emplearon herramientas de inteligencia artificial (ChatGPT, BlackBoxAI, Copilot.) para:
 - Sugerir mejoras en la lógica de movimiento y la detección de colisiones.
 - Optimizar el manejo del Timer y la captura de eventos de teclado.
 - Proporcionar fragmentos de código y resolver problemas específicos.
