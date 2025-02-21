@@ -117,6 +117,42 @@ Este es el clásico juego "Snake" desarrollado en Java Swing. El objetivo es con
 - **Colisiones y Fin del Juego:**  
   Si la serpiente choca contra las paredes o contra sí misma, se produce un "Game Over" en el que se muestra la puntuación final.
 
+# Cómo Jugar
+
+## Controles
+Utiliza las flechas del teclado para cambiar la dirección de la serpiente.
+
+## Objetivo
+Consume la comida para aumentar la longitud de la serpiente y tu puntuación. Evita chocar contra las paredes o contra tu propio cuerpo.
+
+## Game Over
+Al producirse una colisión, se mostrará un mensaje de "Game Over" junto con la puntuación final.
+
+# Notas Técnicas
+
+## Tecnología Utilizada
+El juego está desarrollado en Java y utiliza Swing para la interfaz gráfica.
+
+## Mecánica del Juego
+Se utiliza un Timer para actualizar la lógica y el movimiento de la serpiente. La detección de colisiones, el crecimiento y la generación de comida se gestionan en función de la posición actual de la serpiente y los elementos en el campo de juego.
+
+# Uso de Herramientas de IA
+
+Durante el desarrollo del juego, se emplearon herramientas de inteligencia artificial (ChatGPT, Bard, Copilot, Bing Chat, etc.) para:
+- Sugerir mejoras en la lógica de movimiento y la detección de colisiones.
+- Optimizar el manejo del Timer y la captura de eventos de teclado.
+- Proporcionar fragmentos de código y resolver problemas específicos.
+
+**Ejemplo de documentación:**
+> “El método `moverSerpiente` se generó con la ayuda de ChatGPT para gestionar la colisión.”  
+> “Utilizamos Copilot para optimizar la lógica del Timer.”
+
+# Créditos
+
+## Desarrolladores
+- Aday.
+- Matias.
+
 ## Instalación y Ejecución
 
 ### Requisitos
