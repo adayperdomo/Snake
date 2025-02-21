@@ -1,87 +1,95 @@
- import javax.swing.*;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GamePanel extends JPanel {
-    private LinkedList<Point> snake; // List to store the positions of the snake segments
-    private int direction; // Direction of the snake movement
-    private Point applePosition; // Position of the apple
-
-    private boolean isGameOver = false; // Game Over state
-    private int elapsedTime = 0; // Timer variable
-    private int score = 0; // Player score
-    private Timer movementTimer; // Timer for snake movement
-
-    private Timer elapsedTimeTimer; // Timer for elapsed time
-    private JButton restartButton; // Button to restart the game
-    private JButton exitButton; // Button to exit the game
+    private LinkedList<Point> snake;
+    private int direction;
+    private Point applePosition;
+    private boolean isGameOver = false;
+    private int elapsedTime = 0;
+    private int score = 0;
+    private Timer movementTimer;
+    private Timer elapsedTimeTimer;
+    private JButton restartButton;
+    private JButton exitButton;
+    private Set<Integer> pressedKeys = new HashSet<>();
 
     public GamePanel() {
         snake = new LinkedList<>();
-        snake.add(new Point(100, 100)); // Initial position of the snake head
-        snake.add(new Point(80, 100));  // Initial position of the first body segment
-        direction = KeyEvent.VK_RIGHT; // Initial direction
-        generateApple(); // Generate initial apple position
-
+        snake.add(new Point(100, 100));
+        snake.add(new Point(80, 100));
+        direction = KeyEvent.VK_RIGHT;
+        generateApple();
 
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.GRAY);
-        setFocusable(true); // Make the panel focusable to receive key events
-        addKeyListener(new KeyAdapter() { // Add key listener in the constructor
+        setFocusable(true);
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP:
-                    case KeyEvent.VK_W:
-                        if (direction != KeyEvent.VK_DOWN) direction = KeyEvent.VK_UP; // Prevent moving in the opposite direction
-                        break;
-                    case KeyEvent.VK_DOWN:
-                    case KeyEvent.VK_S:
-                        if (direction != KeyEvent.VK_UP) direction = KeyEvent.VK_DOWN;
-                        break;
-                    case KeyEvent.VK_LEFT:
-                    case KeyEvent.VK_A:
-                        if (direction != KeyEvent.VK_RIGHT) direction = KeyEvent.VK_LEFT;
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                    case KeyEvent.VK_D:
-                        if (direction != KeyEvent.VK_LEFT) direction = KeyEvent.VK_RIGHT;
-                        break;
-                }
+                pressedKeys.add(e.getKeyCode());
+                updateDirection();
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                pressedKeys.remove(e.getKeyCode());
             }
         });
 
-        // Movement timer for the snake
         movementTimer = new Timer(100, e -> {
-            if (direction != 0) { // Only move if a direction is set
+            if (direction != 0) {
                 moveSnake();
             }
         });
-        movementTimer.start(); // Start the movement timer
+        movementTimer.start();
 
-        // Elapsed time timer
         elapsedTimeTimer = new Timer(1000, e -> {
-            elapsedTime++; // Increment elapsed time every second
+            elapsedTime++;
         });
-        elapsedTimeTimer.start(); // Start the elapsed time timer
+        elapsedTimeTimer.start();
 
-        // Initialize buttons
         restartButton = new JButton("Restart");
         exitButton = new JButton("Exit");
         restartButton.addActionListener(this::restartGame);
-        exitButton.addActionListener(e -> System.exit(0)); // Exit action
+        exitButton.addActionListener(e -> System.exit(0));
+    }
+
+    private void updateDirection() {
+        for (Integer key : pressedKeys) {
+            switch (key) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_W:
+                    if (direction != KeyEvent.VK_DOWN) direction = KeyEvent.VK_UP;
+                    break;
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_S:
+                    if (direction != KeyEvent.VK_UP) direction = KeyEvent.VK_DOWN;
+                    break;
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_A:
+                    if (direction != KeyEvent.VK_RIGHT) direction = KeyEvent.VK_LEFT;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_D:
+                    if (direction != KeyEvent.VK_LEFT) direction = KeyEvent.VK_RIGHT;
+                    break;
+            }
+        }
     }
 
     private void moveSnake() {
-        if (isGameOver) return; // Prevent movement if the game is over
+        if (isGameOver) return;
 
-        Point head = snake.getFirst(); // Get the current head position
-        Point newHead = new Point(head); // Create a new head based on the current head
+        Point head = snake.getFirst();
+        Point newHead = new Point(head);
 
-        // Update the head position based on the direction
         switch (direction) {
             case KeyEvent.VK_UP:
                 newHead.translate(0, -20);
@@ -97,47 +105,40 @@ public class GamePanel extends JPanel {
                 break;
         }
 
-        // Check for collisions with walls
         if (newHead.x < 0 || newHead.x >= getWidth() || newHead.y < 0 || newHead.y >= getHeight()) {
-            gameOver(); // Trigger Game Over if the snake hits the wall
+            gameOver();
             return;
         }
 
-        // Check for collisions with itself
         for (int i = 1; i < snake.size(); i++) {
             if (newHead.equals(snake.get(i))) {
-                gameOver(); // Trigger Game Over if the snake collides with itself
+                gameOver();
                 return;
             }
         }
 
-        // Check for apple collision
         if (newHead.equals(applePosition)) {
-            snake.addFirst(newHead); // Grow the snake
-            score++; // Increase score
-            generateApple(); // Generate new apple position
-
+            snake.addFirst(newHead);
+            score++;
+            generateApple();
         } else {
-            // Update the snake's body
-            snake.addFirst(newHead); // Add the new head to the front of the list
+            snake.addFirst(newHead);
             if (snake.size() > 3) {
-                snake.removeLast(); // Keep only two segments
+                snake.removeLast();
             }
         }
 
-
-        repaint(); // Repaint the panel to update the snake's position
+        repaint();
     }
 
     private void gameOver() {
-        isGameOver = true; // Set the game state to over
-        movementTimer.stop(); // Stop the movement timer
-        elapsedTimeTimer.stop(); // Stop the elapsed time timer
-        repaint(); // Repaint to show the game over message
+        isGameOver = true;
+        movementTimer.stop();
+        elapsedTimeTimer.stop();
+        repaint();
     }
 
     private void generateApple() {
-        // Generate random position within panel bounds, aligned with grid
         int maxX = getWidth() / 20 - 1;
         int maxY = getHeight() / 20 - 1;
         applePosition = new Point(
@@ -146,60 +147,62 @@ public class GamePanel extends JPanel {
         );
     }
 
-
     private void restartGame(ActionEvent e) {
-        isGameOver = false; // Reset the game state
-        score = 0; // Reset score
-        snake.clear(); // Clear the snake
-
-        snake.add(new Point(100, 100)); // Reset initial position
-        snake.add(new Point(80, 100)); // Reset first body segment
-        direction = KeyEvent.VK_RIGHT; // Reset direction
-        elapsedTime = 0; // Reset elapsed time
-        movementTimer.start(); // Restart the movement timer
-        elapsedTimeTimer.start(); // Restart the elapsed time timer
-        remove(restartButton); // Remove the restart button
-        remove(exitButton); // Remove the exit button
-        setFocusable(true); // Ensure panel can receive key events
-        requestFocus(); // Request focus for key input
-        repaint(); // Repaint to update the game state
+        isGameOver = false;
+        score = 0;
+        snake.clear();
+        snake.add(new Point(100, 100));
+        snake.add(new Point(80, 100));
+        direction = KeyEvent.VK_RIGHT;
+        elapsedTime = 0;
+        movementTimer.start();
+        elapsedTimeTimer.start();
+        remove(restartButton);
+        remove(exitButton);
+        setFocusable(true);
+        requestFocus();
+        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.white); // Set color for the snake head
-        Point head = snake.getFirst();
-        g.fillRect(head.x, head.y, 20, 20); // Draw the head
+        
+        // Draw grid lines
+        g.setColor(new Color(200, 200, 200)); // Light gray color for grid
+        for (int x = 0; x < getWidth(); x += 20) {
+            g.drawLine(x, 0, x, getHeight());
+        }
+        for (int y = 0; y < getHeight(); y += 20) {
+            g.drawLine(0, y, getWidth(), y);
+        }
+        
+        g.setColor(Color.white);
 
-        g.setColor(Color.black); // Set color for the body
-        // Draw the body segments
+        Point head = snake.getFirst();
+        g.fillRect(head.x, head.y, 20, 20);
+
+        g.setColor(Color.black);
         for (int i = 1; i < snake.size(); i++) {
             Point segment = snake.get(i);
-            g.fillRect(segment.x, segment.y, 20, 20); // Draw the body segments
+            g.fillRect(segment.x, segment.y, 20, 20);
         }
 
-        // Draw the score and timer in the upper left corner
-        g.setColor(Color.white); // Set color for the text
-        g.drawString("Score: " + score, 10, 20); // Draw the score
-        g.drawString("Time: " + elapsedTime + "s", 10, 40); // Draw the timer
+        g.setColor(Color.white);
+        g.drawString("Score: " + score, 10, 20);
+        g.drawString("Time: " + elapsedTime + "s", 10, 40);
 
-
-        // Draw the apple
         g.setColor(Color.RED);
         g.fillRect(applePosition.x, applePosition.y, 20, 20);
 
-        // Draw Game Over message if the game is over
         if (isGameOver) {
-
-            g.setColor(Color.RED); // Set color for Game Over message
-            g.setFont(new Font("Arial", Font.BOLD, 48)); // Set font size
+            g.setColor(Color.RED);
+            g.setFont(new Font("Arial", Font.BOLD, 48));
             String gameOverMessage = "Game Over";
             FontMetrics metrics = g.getFontMetrics(g.getFont());
-            int x = (getWidth() - metrics.stringWidth(gameOverMessage)) / 2; // Center the message
-            g.drawString(gameOverMessage, x, getHeight() / 2 - 20); // Draw message
+            int x = (getWidth() - metrics.stringWidth(gameOverMessage)) / 2;
+            g.drawString(gameOverMessage, x, getHeight() / 2 - 20);
 
-            // Draw buttons
             int buttonWidth = 200;
             int buttonHeight = 50;
             restartButton.setBounds(getWidth() / 2 - buttonWidth / 2, getHeight() / 2 + 20, buttonWidth, buttonHeight);
