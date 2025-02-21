@@ -59,7 +59,9 @@ Durante el desarrollo del juego se emplearon herramientas de inteligencia artifi
 
 ### 1️⃣ Compilar el Proyecto
 Navega al directorio del proyecto y compila el código:
-```bash
+```sh
 javac -d bin src/*.java
-
-
+```
+```sh
+java -cp bin SnakeGame
+```
