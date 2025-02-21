@@ -45,8 +45,8 @@ Durante el desarrollo del juego se emplearon herramientas de inteligencia artifi
 - Proporcionar fragmentos de código y resolver problemas específicos.
 
 **Ejemplo de documentación:**
-> “El método `moverSerpiente` se generó con la ayuda de ChatGPT para gestionar la colisión.”  
-> “Utilizamos Copilot para optimizar la lógica del Timer.”
+> “El método `moverSerpiente` se generó con la ayuda de BlackBoxAI para gestionar la colisión.”  
+> “Utilizamos ChatGPT para optimizar la lógica del Timer.”
 
 ## 📝 Créditos
 
