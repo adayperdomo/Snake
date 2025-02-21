@@ -68,7 +68,7 @@ java -cp bin SnakeGame
 
 ## 🧩 Código del juego
 
-###GamePanel.java
+### GamePanel.java
 ```sh
 import javax.swing.*;
 import java.awt.*;
@@ -286,7 +286,7 @@ public class GamePanel extends JPanel {
 }
 
 ```
-###SnakeGmae.java
+### SnakeGmae.java
 
 ```sh
 import javax.swing.JFrame;
