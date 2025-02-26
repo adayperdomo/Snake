@@ -9,7 +9,7 @@ En esta sesión nos dedicamos poner de manera aleatorio una manzana, tambien le 
 # Sesión 5:
 En esta ultima sesión le añadimos al juego una cuadricula para que quede mas claro en donde estamos, tambien comprobamos si tenia errores y por ultimo mejoramos el readme.
 
-# 🐍 Snake en Java Swing - [TuNombreEquipo]
+# 🐍 Snake en Java Swing 
 
 ## 📌 Descripción
 Este es el clásico juego **Snake** desarrollado en **Java Swing**. El objetivo es controlar una serpiente que se mueve automáticamente por el campo, consumiendo comida para crecer, mientras se evita colisionar con las paredes o con el propio cuerpo.
