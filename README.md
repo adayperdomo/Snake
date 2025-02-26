@@ -51,8 +51,8 @@ Durante el desarrollo del juego se emplearon herramientas de inteligencia artifi
 ## 📝 Créditos
 
 ### Desarrolladores
-- [Aday]
-- [Matias]
+- [ Aday ]
+- [ Matias ]
 
 
 ## 🚀 Compilación y Ejecución
