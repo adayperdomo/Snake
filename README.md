@@ -2,7 +2,12 @@
 En esta sesión nos dedicamos en crear la pantalla para el juego  con un tamaño personalizado con un color de fondo y tambien creamos el repositorio de github.
 # Sesión 2:
 En esta sesión nos dedicamos en dibujar a la serpiente para que se muestre en la pantalla y tambien le dimos movilidad para que se pueda mover tanto para arriba, como para abajo e izquierda y derecha.
-
+# Sesión 3:
+En esta sesión nos dedicamos a poner un temporizador y en lo bordes le pusimos coliciones, para que cuando la serpiente tocara la pantalla saliera una pantalla de game over y aparece dos botones uno para reiniciar la partida y otro para salir del juego, aunque detectamos un error cuando reinicias el juego, por ultimo añadimos el movimiento automatico.
+# Sesión 4:
+En esta sesión nos dedicamos poner de manera aleatorio una manzana, tambien le añadimos un crecimiento y cuando atrapa la mazana aumenta de tamaño la serpiente, por ultimo ya reparamos el error del reinicio.
+# Sesión 5:
+En esta ultima sesión le añadimos al juego una cuadricula para que quede mas claro en donde estamos, tambien comprobamos si tenia errores y por ultimo mejoramos el readme.
 
 # 🐍 Snake en Java Swing - [TuNombreEquipo]
 
